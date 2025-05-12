@@ -11,7 +11,7 @@
 - ESLint setup
 - VSCode configuration
 - Git repository initialization
-- Package management with PNPM
+- Package management with NPM
 - Middleware implementation for auth
 
 ## In Progress

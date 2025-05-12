@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+#Видео на Драго как го обяснява - https://vento.so/view/5f1da3c0-2717-4665-8032-7df72f758b23?utm_medium=share
+# Това е Git hook скрипт, който автоматично форматира съобщенията при сливане
+# Изпълнява се когато Git създава commit, но преди съобщението да бъде запазено
+# Скриптът се активира само при merge commits за поддържане на консистентно форматиране
+
+# Аргументи подадени от Git към този hook:
+# $1 (COMMIT_MSG_FILE) - Път към временен файл, съдържащ шаблона на commit съобщението
+# $2 (COMMIT_SOURCE) - Указва източника на commit-a:
+#   - "message" (чрез -m или -F опция)
+#   - "template" (чрез -t опция или commit.template конфигурация)
+#   - "merge" (merge commit)
+#   - "squash" (чрез --squash опция)
+#   - празно (нормален commit)
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+# Обработва само merge commits за осигуряване на консистентно форматиране в екипа
+if [ "$COMMIT_SOURCE" = "merge" ]; then
+  git config --local merge.ff false
+  git config --local merge.edit true
+  # Взима името на текущия клон (целевия клон за сливането)
+  # git branch --show-current връща името на текущия активен клон
+  CURRENT_BRANCH=$(git branch --show-current)
+
+  # Взима хеша на клона, който се слива
+  # По време на сливане, Git съхранява хеша на сливания commit в .git/MERGE_HEAD
+  MERGE_HEAD=$(cat .git/MERGE_HEAD)
+
+  # Конвертира хеша на merge commit-a в четимо име на клон
+  # git name-rev конвертира хеша в име като 'feature/xyz~2'
+  # sed премахва ~N суфикса, който показва колко commit-а назад
+  MERGE_BRANCH=$(git name-rev --name-only "$MERGE_HEAD" | sed 's/~.*//')
+
+  # Създава форматирано съобщение за сливане със следната структура:
+  # - Първи ред: "Мърдж клон 'източник-клон' към целеви-клон"
+  # - Празен ред
+  # - Списък с точки на всички commit-и, които се сливат. Това са prefix-овете
+  #
+  # git log командата взима всички commit-и между HEAD и MERGE_HEAD
+  # sed -E премахва хеша на commit-a и добавя точка
+  # sed добавя нови редове между записите за по-добра четимост
+  NEW_MSG="IMPORTANT: Merge (custom) '$MERGE_BRANCH' към $CURRENT_BRANCH:
+
+$(git log --oneline HEAD..$MERGE_HEAD | sed -E 's/^[a-f0-9]+ /- /' | sed 's/$/\n/')"
+
+  # Записва форматираното съобщение във файла за commit съобщения
+  # Това заменя стандартното Git съобщение за сливане
+  echo "$NEW_MSG" > "$COMMIT_MSG_FILE"
+fi
+
+git add .

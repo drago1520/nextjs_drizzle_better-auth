@@ -2,16 +2,10 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendMagicLinkEmail({
-  email,
-  url,
-}: {
-  email: string;
-  url: string;
-}) {
+export async function sendMagicLinkEmail({ email, url }: { email: string; url: string }) {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Magic Link <onboarding@resend.dev>',
+      from: `Magic Link <${process.env.SENDER_EMAIL}>`,
       to: email,
       subject: 'Your Magic Link',
       html: `
@@ -40,4 +34,4 @@ export async function sendMagicLinkEmail({
     console.error('Error sending magic link email:', error);
     throw error;
   }
-} 
+}

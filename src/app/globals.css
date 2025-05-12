@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -51,7 +51,7 @@ body {
   --radius: 0.625rem;
   --background: #192132;
   --foreground: oklch(15.34% 0.019 278.97);
-  --card: #26334D;
+  --card: #26334d;
   --card-foreground: #a3adc2;
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
@@ -64,20 +64,20 @@ body {
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #282D54;
+  --border: #282d54;
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: #26334D;
-  --chart-2: #26334D;
-  --chart-3: #26334D;
-  --chart-4: #26334D;
-  --chart-5: #26334D;
+  --chart-1: #26334d;
+  --chart-2: #26334d;
+  --chart-3: #26334d;
+  --chart-4: #26334d;
+  --chart-5: #26334d;
   --sidebar: #202B404;
   --sidebar-foreground: #a3adc2;
   --sidebar-primary: #222f46;
   --sidebar-primary-foreground: #a3adc2;
-  --sidebar-accent: #26334D;
+  --sidebar-accent: #26334d;
   --sidebar-accent-foreground: #a3adc2;
-  --sidebar-border: #1C203C;
-  --sidebar-ring: #282D54;
+  --sidebar-border: #1c203c;
+  --sidebar-ring: #282d54;
 }

@@ -27,7 +27,7 @@
 - Shadcn UI for components
 
 ### Development
-- PNPM for package management
+- NPM for package management
 - Turbopack for development
 - TypeScript strict mode
 - ESLint for code quality

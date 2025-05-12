@@ -97,7 +97,7 @@ Contains all TypeScript interfaces for the handbook feature:
 
 - Use always use npx shadcn@latest init to install shadcn/ui. Avoid using shadcn-ui as it's deprecated.
 - Use always use npx shadcn@latest add [component] to add a component to the project.
-- Always use pnpm as the package manager.
+- Always use NPM as the package manager.
 
 You are an expert developer in TypeScript, Node.js, Next.js 15 App Router, React, Better-auth, GraphQL, Genql, Tailwind CSS, Radix UI, and Shadcn UI.
 

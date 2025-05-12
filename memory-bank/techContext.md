@@ -9,12 +9,12 @@
 - Radix UI
 - Shadcn UI
 - React 19
-- PNPM Package Manager
+- NPM Package Manager
 
 ## Development Setup
 
 - Node.js environment
-- PNPM as package manager (v9.11.0)
+- NPM as package manager (v9.11.0)
 - Turbopack for development
 - ESLint for code linting
 - TypeScript for type checking
@@ -65,7 +65,7 @@ UI:
 ## Infrastructure
 
 - Version Control: Git
-- Package Management: PNPM
+- Package Management: NPM
 - Development Server: Next.js dev server with Turbopack
 - Database: neondb
 - Authentication: Better-auth

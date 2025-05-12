@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the install:
 
 ```bash
-pnpm install
+NPM install
 ```
 
 ## Adding the env credentials
@@ -58,5 +58,5 @@ after that we need to push it to our Neon db
 Now if we have done everything correct we can visit it on localhost:3000
 
 ```bash
-pnpm run dev
+NPM run dev
 ```
