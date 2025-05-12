@@ -11,8 +11,8 @@ const envPath =
 config({path: envPath})
 
 export default defineConfig({
-  out: "./models/.__drizzle/",
-  schema: "./models/schema/*",
+  out: "./src/models/.__drizzle/",
+  schema: "./src/models/schema/*",
   dialect: "postgresql",
   dbCredentials: {
     url: process.env.DATABASE_URL!,
