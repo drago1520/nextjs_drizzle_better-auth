@@ -1,8 +1,10 @@
 import { Resend } from 'resend';
+//? Works only if WITH_MAGIC_LINK is set == true
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-export async function sendMagicLinkEmail({ email, url }: { email: string; url: string }) {
+export const sendMagicLink = async ({ email, url }: { email: string; url: string; token: string }, request?: Request): Promise<void> => {
+  let resend: Resend | null;
+  if (process.env.WITH_MAGIC_LINK) resend = new Resend(process.env.RESEND_API_KEY);
+  else return;
   try {
     const { data, error } = await resend.emails.send({
       from: `Magic Link <${process.env.SENDER_EMAIL}>`,
@@ -28,10 +30,7 @@ export async function sendMagicLinkEmail({ email, url }: { email: string; url: s
       console.error('Error sending magic link email:', error);
       throw error;
     }
-
-    return data;
   } catch (error) {
     console.error('Error sending magic link email:', error);
-    throw error;
   }
-}
+};

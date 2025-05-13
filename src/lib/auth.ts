@@ -2,9 +2,9 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
 import { anonymous, magicLink, openAPI } from 'better-auth/plugins';
-import { sendMagicLinkEmail } from './email';
 import { db, schema } from '@/models';
 import { anonymousConfig } from './anonymous.config';
+import { sendMagicLink } from './magic-link.config';
 
 export const auth = betterAuth({
   emailAndPassword: {
@@ -30,14 +30,8 @@ export const auth = betterAuth({
   plugins: [
     nextCookies(),
     magicLink({
-      sendMagicLink: async ({ email, url }) => {
-        try {
-          await sendMagicLinkEmail({ email, url });
-        } catch (error) {
-          console.error('Failed to send magic link email:', error);
-          throw new Error('Failed to send magic link email');
-        }
-      },
+      //? Works only if WITH_MAGIC_LINK == true
+      sendMagicLink,
     }),
     openAPI(),
     anonymous(anonymousConfig),
