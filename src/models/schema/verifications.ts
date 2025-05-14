@@ -8,3 +8,6 @@ export const verifications = pgTable('verifications', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+export type SelectVerifications = typeof verifications.$inferSelect;
+export type InsertVerifications = typeof verifications.$inferInsert;

@@ -21,3 +21,7 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export type SelectSessions = typeof sessions.$inferSelect;
+
+export type InsertSessions = typeof sessions.$inferInsert;
