@@ -3,8 +3,9 @@ import { accounts, accountsRelations } from './schema/accounts';
 import { sessions, sessionsRelations } from './schema/sessions';
 import { users, usersRelations } from './schema/users';
 import { verifications } from './schema/verifications';
+import contacts from './schema/contacts';
 
-const tables = { users, sessions, accounts, verifications };
+const tables = { users, sessions, accounts, verifications, contacts };
 const relations = { usersRelations, sessionsRelations, accountsRelations };
 export const schema = { ...tables, ...relations };
 
