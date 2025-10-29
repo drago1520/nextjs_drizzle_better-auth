@@ -1,4 +1,4 @@
-import { drizzle } from 'drizzle-orm/neon-http';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import { accounts, accountsRelations } from './schema/accounts';
 import { sessions, sessionsRelations } from './schema/sessions';
 import { users, usersRelations } from './schema/users';

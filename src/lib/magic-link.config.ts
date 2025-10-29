@@ -4,7 +4,7 @@ import { Resend } from 'resend';
 export const sendMagicLink = async ({ email, url }: { email: string; url: string; token: string }, request?: Request): Promise<void> => {
   let resend: Resend | null;
   if (process.env.WITH_MAGIC_LINK) resend = new Resend(process.env.RESEND_API_KEY);
-  else return;
+  else throw new Error('No magic link env variable passed');
   try {
     const { data, error } = await resend.emails.send({
       from: `Magic Link <${process.env.SENDER_EMAIL}>`,

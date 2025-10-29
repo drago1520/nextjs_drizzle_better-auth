@@ -10,8 +10,10 @@ import { z } from 'zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import ImageUpload from '@/components/image-upload';
+import { useState } from 'react';
 
 export default function Page() {
+  const [error, setError] = useState('');
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -35,13 +37,14 @@ export default function Page() {
             </Label>
             <Input id={inputNames.name} name={inputNames.name} placeholder="John" />
             </div> */}
+          <span className="text-destructive">{error}</span>
           <FormField
             control={form.control}
             name={inputNames.imgUrl}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <ImageUpload imgUrl={form.getValues('imgUrl')} setImgUrl={field.onChange} imgUrlInputProps={{ ...field }} />
+                  <ImageUpload onError={setError} imgUrl={form.getValues('imgUrl')} onImgChange={field.onChange} imgUrlInputProps={{ ...field }} />
                 </FormControl>
                 <div className="flex justify-center">
                   <FormMessage />

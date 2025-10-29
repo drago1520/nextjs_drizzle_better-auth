@@ -1,10 +1,10 @@
 'use server';
 
-import { errorLogger } from './error';
+import { ErrorLogger, errorLogger } from './error';
 
 const imageVariant = '/dex';
 
-export async function uploadImage(images: File[]): Promise<{ error?: string; success: boolean; imgUrl?: string; imgId?: string }> {
+export async function uploadImage(images: File[]): Promise<{ success: true; imgUrl: string; imgId: string } | ErrorLogger> {
   if (!images[0]) return errorLogger('No image to upload');
   const formData = new FormData();
   images.forEach(image => formData.append('file', image, image.name));

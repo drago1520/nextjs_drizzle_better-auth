@@ -1,25 +1,28 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { nextCookies } from 'better-auth/next-js';
-import { anonymous, magicLink, openAPI } from 'better-auth/plugins';
 import { db, schema } from '@/models';
-import { anonymousConfig } from './anonymous.config';
-import { sendMagicLink } from './magic-link.config';
+import { plugins } from './better-auth-plugins';
 
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
   socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-      prompt: 'select_account',
-    },
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    },
+    ...(process.env.GOOGLE_CLIENT_ID &&
+      process.env.GOOGLE_CLIENT_SECRET && {
+        google: {
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          prompt: 'select_account',
+        },
+      }),
+    ...(process.env.GITHUB_CLIENT_ID &&
+      process.env.GITHUB_CLIENT_SECRET && {
+        github: {
+          clientId: process.env.GITHUB_CLIENT_ID,
+          clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        },
+      }),
   },
 
   database: drizzleAdapter(db, {
@@ -27,15 +30,7 @@ export const auth = betterAuth({
     usePlural: true,
     schema: schema,
   }),
-  plugins: [
-    nextCookies(),
-    magicLink({
-      //? Works only if WITH_MAGIC_LINK == true
-      sendMagicLink,
-    }),
-    openAPI(),
-    anonymous(anonymousConfig),
-  ],
+  plugins,
   session: {
     expiresIn: 60 * 60 * 24 * 365, // 1 year
     cookieCache: {

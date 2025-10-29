@@ -14,18 +14,22 @@ import { deleteImage } from '@/utils/delete-image';
 type ImageUploadProps = {
   className?: string;
   /**
-   * @description form.watch('imgUrl') if using react-hook-form
+   * @description form.watch('imgUrl') if using react-hook-form.
    */
   imgUrl: string;
   /**
    * @description form.setValues() || field.onChange if using react-hook-form
    */
-  setImgUrl: (imgUrl: string) => void;
+  onImgChange: (imgUrl: string) => void;
+  /**
+   * @description The field obj from React-hook-form
+   */
   imgUrlInputProps: React.ComponentProps<'input'>;
+  onError: (error: string) => void;
 };
 
 //TODO Toast error message
-export default function ImageUpload({ className, imgUrl, setImgUrl, imgUrlInputProps }: ImageUploadProps) {
+export default function ImageUpload({ className, imgUrl, onImgChange, imgUrlInputProps, onError }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,29 +44,35 @@ export default function ImageUpload({ className, imgUrl, setImgUrl, imgUrlInputP
   };
   const upload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
-      setError('Please use only .jpeg, .jpg, .webp, .png or .svg file types');
+      const msg = 'Please use only .jpeg, .jpg, .webp, .png or .svg file types';
+      onError(msg);
+      setError(msg);
       return;
     }
 
     try {
       setIsUploading(true);
+      onError('');
       setError(null);
 
       const result = await uploadImage([file]);
 
-      if ('error' in result) {
+      if (!result.success) {
+        setError(result.error || '');
+        onError(result.error || '');
         throw new Error(result.error);
       }
 
       // Update with server URL
-      setImgUrl(result.imgUrl || '');
+      onImgChange(result.imgUrl || '');
       setImgId(result.imgId || '');
     } catch (e) {
       //TODO Log to PostHog
       const err = e as Error;
       console.error(err);
-      setError(err.name);
-      setImgUrl('');
+      onError(err.message);
+      setError(err.message);
+      onImgChange('');
     } finally {
       setIsUploading(false);
     }
@@ -71,12 +81,16 @@ export default function ImageUpload({ className, imgUrl, setImgUrl, imgUrlInputP
   //TODO delete img from Cloudflare
   const handleRemoveImage = async () => {
     setError(null);
+    onError('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
     const result = await deleteImage(imgId);
-    if (!result.success) setError(result.error);
-    setImgUrl('');
+    if (!result.success) {
+      setError(result.error);
+      onError('');
+    }
+    onImgChange('');
   };
 
   const handleAvatarClick = () => {
@@ -160,7 +174,7 @@ export default function ImageUpload({ className, imgUrl, setImgUrl, imgUrlInputP
         )}
 
         {/* perf: don't send the image file to my backend again when submiting the form */}
-        {!imgUrl && <Input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />}
+        <Input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
         <Input type="hidden" disabled={isUploading} {...imgUrlInputProps} />
       </div>
       <p className="text-muted-foreground text-sm">

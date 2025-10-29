@@ -7,7 +7,6 @@ const envPath =
   enviroment === "development" ? '.env.development' :
   enviroment === "production" ? '.env.production' :
   'missing enviroment vars'
-
 config({path: envPath})
 
 export default defineConfig({
