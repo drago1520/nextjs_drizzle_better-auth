@@ -1,0 +1,17 @@
+{
+  "servers": {
+    "next-devtools": {
+      "command": "npx",
+      "args": ["${input:args}"],
+      "env": {},
+      "type": "stdio"
+    }
+  },
+  "inputs": [
+    {
+      "id": "args",
+      "type": "promptString",
+      "description": "Enter the arguments for the MCP server command"
+    }
+  ]
+}
